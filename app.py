@@ -41,8 +41,8 @@ st.title('Image Classification with ResNet50')
 uploaded_file = st.file_uploader("Choose an image...", type=["jpg", "jpeg", "png"])
 
 if uploaded_file is not None:
-    image = Image.open(uploaded_file)
-    st.image(image, caption='Uploaded Image', use_column_width=True)
+    uploaded_image = Image.open(uploaded_file)
+    st.image(uploaded_image, caption='Uploaded Image', use_column_width=True)
     st.write("")
     st.write("Classifying...")
     predicted_class, prediction_confidence = predict_and_show(uploaded_file)
