@@ -33,6 +33,7 @@ def predict_and_show(img_data):
     top_prediction = decoded_predictions[0]  # Get the top prediction
     predicted_class = top_prediction[1]  # Class name
     prediction_confidence = top_prediction[2]  # Confidence level
+    prediction_confidence = prediction_confidence*100
 
     return predicted_class, prediction_confidence
 
