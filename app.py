@@ -48,4 +48,4 @@ if uploaded_file is not None:
     st.write("Classifying...")
     predicted_class, prediction_confidence = predict_and_show(uploaded_file)
     st.write(f'Prediction: {predicted_class}')
-    st.write(f'Confidence: {prediction_confidence:.2f}%')
+    st.write(f'Confidence Level: {prediction_confidence:.2f}%')
