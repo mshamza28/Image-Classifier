@@ -71,6 +71,7 @@ if uploaded_file is not None:
     predictions = predict_and_show(uploaded_file, confidence_threshold)
     
     st.write("<p class='big-font'>Results</p>", unsafe_allow_html=True)
+    st.title("Results")
 
     if predictions:
         # Display predictions as a Plotly bar chart
