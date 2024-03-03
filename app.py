@@ -17,6 +17,11 @@ import matplotlib.pyplot as plt
 # Load the pre-trained ResNet50 model
 model = ResNet50(weights='imagenet')
 
+def load_lottieurl(url):
+    r = requests.get(url)
+    if r.status_code == 200:
+        return r.json()
+
 def predict_and_show(img_data):
     # Load and preprocess the image
     img = Image.open(img_data)
@@ -45,6 +50,12 @@ if uploaded_file is not None:
     uploaded_image = Image.open(uploaded_file)
     st.image(uploaded_image, caption='Uploaded Image', use_column_width=True)
     st.write("")
+
+    # Display Lottie animation
+    lottie_url = "https://lottiefiles.com/animations/quad-sliding-cubes-v1-split-v4T2IPTVwM"  # Replace this with your Lottie animation URL
+    lottie_animation = load_lottieurl(lottie_url)
+    st_lottie(lottie_animation, height=200, key="classification")
+    
     st.write("Classifying...")
     predicted_class, prediction_confidence = predict_and_show(uploaded_file)
     st.write(f'Prediction: {predicted_class}')
