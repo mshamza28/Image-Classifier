@@ -15,6 +15,16 @@ from tensorflow.keras.applications.resnet50 import ResNet50, preprocess_input, d
 import matplotlib.pyplot as plt
 import requests
 from streamlit_lottie import st_lottie
+import plotly.express as px
+
+# Custom CSS
+st.markdown("""
+<style>
+.big-font {
+    font-size:20px !important;
+}
+</style>
+""", unsafe_allow_html=True)
 
 # Load the pre-trained ResNet50 model
 model = ResNet50(weights='imagenet')
@@ -36,13 +46,9 @@ def predict_and_show(img_data):
     predictions = model.predict(x)
 
     # Decode predictions
-    decoded_predictions = decode_predictions(predictions, top=1)[0]
-    top_prediction = decoded_predictions[0]  # Get the top prediction
-    predicted_class = top_prediction[1]  # Class name
-    prediction_confidence = top_prediction[2]  # Confidence level
-    prediction_confidence = prediction_confidence*100
+    decoded_predictions = decode_predictions(predictions, top=3)[0]
 
-    return predicted_class, prediction_confidence
+    return decoded_predictions
 
 # Sidebar - Advanced options
 st.sidebar.header('Advanced Options')
@@ -55,15 +61,24 @@ uploaded_file = st.file_uploader("Choose an image...", type=["jpg", "jpeg", "png
 if uploaded_file is not None:
     uploaded_image = Image.open(uploaded_file)
     st.image(uploaded_image, caption='Uploaded Image', use_column_width=True)
-    st.write("")
-    st.write("Classifying...")
+    st.write("<p class='big-font'>Classifying...</p>", unsafe_allow_html=True)
 
     # Display Lottie animation
     lottie_url = "https://lottie.host/0947e056-459f-4085-ac4e-5ff581720adf/7idKi02kJv.json"  # Replace this with your Lottie animation URL
     lottie_animation = load_lottieurl(lottie_url)
     st_lottie(lottie_animation, height=200, key="classification")
-    
-    st.write("Result")
-    predicted_class, prediction_confidence = predict_and_show(uploaded_file)
-    st.write(f'Prediction: {predicted_class}')
-    st.write(f'Confidence Level: {prediction_confidence:.2f}%')
+
+    # Display predictions as a Plotly bar chart
+    labels = [pred[1] for pred in predictions]
+    scores = [pred[2] * 100 for pred in predictions]
+    fig = px.bar(x=labels, y=scores, labels={'x':'Predicted Class', 'y':'Confidence (%)'}, title="Top Predictions")
+    st.plotly_chart(fig, use_container_width=True)
+
+    # Expandable section with prediction details
+    with st.expander("See prediction details"):
+        for pred in predictions:
+            st.write(f"{pred[1].capitalize()}: {pred[2]*100:.2f}% confidence")
+# Footer
+st.markdown("---")
+st.markdown("Built with ❤️ using Streamlit")
+
