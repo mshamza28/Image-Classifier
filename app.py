@@ -68,12 +68,14 @@ if uploaded_file is not None:
     lottie_animation = load_lottieurl(lottie_url)
     st_lottie(lottie_animation, height=200, key="classification")
 
+    predictions = predict_and_show(uploaded_file)
+
     # Display predictions as a Plotly bar chart
     labels = [pred[1] for pred in predictions]
     scores = [pred[2] * 100 for pred in predictions]
     fig = px.bar(x=labels, y=scores, labels={'x':'Predicted Class', 'y':'Confidence (%)'}, title="Top Predictions")
     st.plotly_chart(fig, use_container_width=True)
-
+    
     # Expandable section with prediction details
     with st.expander("See prediction details"):
         for pred in predictions:
