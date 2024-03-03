@@ -14,6 +14,7 @@ from tensorflow.keras.preprocessing import image
 from tensorflow.keras.applications.resnet50 import ResNet50, preprocess_input, decode_predictions
 import matplotlib.pyplot as plt
 import requests
+from streamlit_lottie import st_lottie
 
 # Load the pre-trained ResNet50 model
 model = ResNet50(weights='imagenet')
