@@ -55,7 +55,7 @@ if uploaded_file is not None:
     st.write("Classifying...")
 
     # Display Lottie animation
-    lottie_url = "https://assets8.lottiefiles.com/packages/lf20_2LdLki.json"  # Replace this with your Lottie animation URL
+    lottie_url = "https://lottie.host/0947e056-459f-4085-ac4e-5ff581720adf/7idKi02kJv.json"  # Replace this with your Lottie animation URL
     lottie_animation = load_lottieurl(lottie_url)
     st_lottie(lottie_animation, height=200, key="classification")
     
