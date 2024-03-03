@@ -52,7 +52,7 @@ def predict_and_show(img_data, confidence_threshold):
 
 # Sidebar - Advanced options
 st.sidebar.header('Advanced Options')
-confidence_threshold = st.sidebar.slider('Confidence Threshold', 0, 100, 50)
+confidence_threshold = st.sidebar.slider('Confidence Threshold', 0, 100, 20)
 
 # Streamlit UI
 st.title('Image Classifier')
@@ -64,13 +64,12 @@ if uploaded_file is not None:
     st.write("<p class='big-font'>Classifying...</p>", unsafe_allow_html=True)
 
     # Display Lottie animation
-    lottie_url = "https://lottie.host/0947e056-459f-4085-ac4e-5ff581720adf/7idKi02kJv.json"  # Replace this with your Lottie animation URL
+    lottie_url = "https://lottie.host/0947e056-459f-4085-ac4e-5ff581720adf/7idKi02kJv.json"  # Lottie animation URL
     lottie_animation = load_lottieurl(lottie_url)
     st_lottie(lottie_animation, height=200, key="classification")
 
     predictions = predict_and_show(uploaded_file, confidence_threshold)
     
-    st.write("<p class='big-font'>Results</p>", unsafe_allow_html=True)
     st.title("Results")
 
     if predictions:
