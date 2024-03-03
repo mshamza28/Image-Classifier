@@ -44,6 +44,10 @@ def predict_and_show(img_data):
 
     return predicted_class, prediction_confidence
 
+# Sidebar - Advanced options
+st.sidebar.header('Advanced Options')
+confidence_threshold = st.sidebar.slider('Confidence Threshold', 0, 100, 20)
+
 # Streamlit UI
 st.title('Image Classifier')
 uploaded_file = st.file_uploader("Choose an image...", type=["jpg", "jpeg", "png"])
