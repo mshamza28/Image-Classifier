@@ -4,3 +4,4 @@ Pillow==9.4.0
 streamlit==1.31.1
 streamlit-lottie==0.0.5
 tensorflow==2.15.0
+plotly==5.15.0
