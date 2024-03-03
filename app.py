@@ -34,25 +34,25 @@ def load_lottieurl(url):
     if r.status_code == 200:
         return r.json()
 
-def predict_and_show(img_data):
-    # Load and preprocess the image
-    img = Image.open(img_data)
-    img = img.resize((224, 224), Image.NEAREST)
-    x = image.img_to_array(img)
-    x = np.expand_dims(x, axis=0)
-    x = preprocess_input(x)
+def predict_and_show(img_data, confidence_threshold):
+    with st.spinner('Processing...'):
+        img = Image.open(img_data)
+        img = img.resize((224, 224), Image.NEAREST)
+        x = image.img_to_array(img)
+        x = np.expand_dims(x, axis=0)
+        x = preprocess_input(x)
 
-    # Make predictions
-    predictions = model.predict(x)
+        predictions = model.predict(x)
+        decoded_predictions = decode_predictions(predictions, top=3)[0]
 
-    # Decode predictions
-    decoded_predictions = decode_predictions(predictions, top=3)[0]
+        # Filter predictions based on confidence_threshold
+        filtered_predictions = [pred for pred in decoded_predictions if pred[2]*100 >= confidence_threshold]
 
-    return decoded_predictions
+    return filtered_predictions
 
 # Sidebar - Advanced options
 st.sidebar.header('Advanced Options')
-confidence_threshold = st.sidebar.slider('Confidence Threshold', 0, 100, 20)
+confidence_threshold = st.sidebar.slider('Confidence Threshold', 0, 100, 50)
 
 # Streamlit UI
 st.title('Image Classifier')
@@ -68,17 +68,20 @@ if uploaded_file is not None:
     lottie_animation = load_lottieurl(lottie_url)
     st_lottie(lottie_animation, height=200, key="classification")
 
-    predictions = predict_and_show(uploaded_file)
+    predictions = predict_and_show(uploaded_file, confidence_threshold)
 
-    # Display predictions as a Plotly bar chart
-    labels = [pred[1] for pred in predictions]
-    scores = [pred[2] * 100 for pred in predictions]
-    fig = px.bar(x=labels, y=scores, labels={'x':'Predicted Class', 'y':'Confidence (%)'}, title="Top Predictions")
-    st.plotly_chart(fig, use_container_width=True)
-    
-    # Expandable section with prediction details
-    with st.expander("See prediction details"):
-        for pred in predictions:
-            st.write(f"{pred[1].capitalize()}: {pred[2]*100:.2f}% confidence")
+    if predictions:
+        # Display predictions as a Plotly bar chart
+        labels = [pred[1] for pred in predictions]
+        scores = [pred[2] * 100 for pred in predictions]
+        fig = px.bar(x=labels, y=scores, labels={'x':'Predicted Class', 'y':'Confidence (%)'}, title="Top Predictions")
+        st.plotly_chart(fig, use_container_width=True)
+
+        # Expandable section with prediction details
+        with st.expander("See prediction details"):
+            for pred in predictions:
+                st.write(f"{pred[1].capitalize()}: {pred[2]*100:.2f}% confidence")
+    else:
+        st.write("No predictions with confidence above the threshold.")
 # Footer
 st.markdown("---")
