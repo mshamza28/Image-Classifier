@@ -78,10 +78,10 @@ if uploaded_file is not None:
         st.plotly_chart(fig, use_container_width=True)
 
         # Expandable section with prediction details
-        with st.expander("See prediction details"):
+        with st.expander("See Prediction Details"):
             for pred in predictions:
-                st.write(f"{pred[1].capitalize()}: {pred[2]*100:.2f}% confidence")
+                st.write(f"{pred[1].capitalize()}: {pred[2]*100:.2f}% Confidence Level")
     else:
-        st.write("No predictions with confidence above the threshold.")
+        st.write("No Predictions with Confidence Level above the Threshold.")
 # Footer
 st.markdown("---")
