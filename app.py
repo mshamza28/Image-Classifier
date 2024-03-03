@@ -82,5 +82,3 @@ if uploaded_file is not None:
             st.write(f"{pred[1].capitalize()}: {pred[2]*100:.2f}% confidence")
 # Footer
 st.markdown("---")
-st.markdown("Built with ❤️ using Streamlit")
-
