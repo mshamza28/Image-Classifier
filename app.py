@@ -54,7 +54,7 @@ if uploaded_file is not None:
     st.write("")
 
     # Display Lottie animation
-    lottie_url = "https://lottiefiles.com/animations/quad-sliding-cubes-v1-split-v4T2IPTVwM"  # Replace this with your Lottie animation URL
+    lottie_url = "https://assets8.lottiefiles.com/packages/lf20_2LdLki.json"  # Replace this with your Lottie animation URL
     lottie_animation = load_lottieurl(lottie_url)
     st_lottie(lottie_animation, height=200, key="classification")
     
