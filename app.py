@@ -45,7 +45,7 @@ def predict_and_show(img_data):
     return predicted_class, prediction_confidence
 
 # Streamlit UI
-st.title('Image Classification with ResNet50')
+st.title('Image Classifier')
 uploaded_file = st.file_uploader("Choose an image...", type=["jpg", "jpeg", "png"])
 
 if uploaded_file is not None:
