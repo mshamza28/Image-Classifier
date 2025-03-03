@@ -38,7 +38,7 @@ st.sidebar.header('Advanced Options')
 confidence_threshold = st.sidebar.slider('Confidence Threshold', 0, 100, 20)
 
 # **Real-Time Classification UI**
-st.title('Real-Time Image Classifier 🎮')
+st.title('Real-Time Image Classifier')
 
 # **Webcam Capture for Live Classification**
 st.sidebar.subheader("Capture via Webcam 📷")
@@ -55,42 +55,31 @@ uploaded_files = st.file_uploader(
 if webcam_image:
     uploaded_files = [webcam_image]  # Treat it as a list for consistency
 
-# **'GUESS THE OBJECT' FEATURE**
+# **REAL-TIME CLASSIFICATION**
 if uploaded_files:
-    for i, uploaded_file in enumerate(uploaded_files):
-        unique_key = f"file_{i}_{hash(uploaded_file)}"  # Unique key for each file
-
+    for uploaded_file in uploaded_files:
         uploaded_image = Image.open(uploaded_file)
         st.image(uploaded_image, caption='Uploaded Image', use_column_width=True)
 
-        # Ask the user to guess
-        user_guess = st.text_input(f"🔍 Guess what this object is! (Image {i+1})", key=f"guess_{unique_key}")
+        # Display loading animation
+        lottie_url = "https://lottie.host/48a98916-5ce1-41f7-a043-b5932bc5c542/w183dqaRuZ.json"
+        lottie_animation = load_lottieurl(lottie_url)
+        st_lottie(lottie_animation, height=200, key=str(uploaded_file))
 
-        # Button to reveal prediction
-        reveal = st.button("Reveal Prediction", key=f"reveal_{unique_key}")
+        # Run Prediction Instantly (Real-Time)
+        predictions = predict_and_show(uploaded_file, confidence_threshold)
 
-        if reveal:
-            st.write("🔍 **Let's see if your guess was correct!**")
+        st.title("Results")
+        if predictions:
+            labels = [pred[1] for pred in predictions]
+            scores = [pred[2] * 100 for pred in predictions]
+            fig = px.bar(x=labels, y=scores, labels={'x':'Predicted Class', 'y':'Confidence (%)'}, title="Top Predictions")
+            st.plotly_chart(fig, use_container_width=True)
 
-            # Display Lottie animation
-            lottie_url = "https://lottie.host/48a98916-5ce1-41f7-a043-b5932bc5c542/w183dqaRuZ.json"
-            lottie_animation = load_lottieurl(lottie_url)
-            st_lottie(lottie_animation, height=200, key=f"animation_{unique_key}")
-
-            # Run Prediction Instantly
-            predictions = predict_and_show(uploaded_file, confidence_threshold)
-
-            st.title("Results")
-            if predictions:
-                labels = [pred[1] for pred in predictions]
-                scores = [pred[2] * 100 for pred in predictions]
-                fig = px.bar(x=labels, y=scores, labels={'x':'Predicted Class', 'y':'Confidence (%)'}, title="Top Predictions")
-                st.plotly_chart(fig, use_container_width=True)
-
-                with st.expander(f"See Prediction Details (Image {i+1})", key=f"details_{unique_key}"):
-                    for pred in predictions:
-                        st.write(f"✅ **{pred[1].capitalize()}**: {pred[2]*100:.2f}% Confidence Level")
-            else:
-                st.write("⚠️ No Predictions with Confidence Level above the Threshold.")
+            with st.expander("See Prediction Details"):
+                for pred in predictions:
+                    st.write(f"✅ **{pred[1].capitalize()}**: {pred[2]*100:.2f}% Confidence Level")
+        else:
+            st.write("⚠️ No Predictions with Confidence Level above the Threshold.")
 
 st.markdown("---")
