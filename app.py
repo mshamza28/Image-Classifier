@@ -40,9 +40,6 @@ confidence_threshold = st.sidebar.slider('Confidence Threshold', 0, 100, 20)
 # **Real-Time Classification UI**
 st.title('Real-Time Image Classifier')
 
-# **Webcam Capture for Live Classification**
-st.sidebar.subheader("Capture via Webcam 📷")
-webcam_image = st.sidebar.camera_input("Live Image Capture")
 
 # **Drag & Drop / Multiple Image Upload**
 uploaded_files = st.file_uploader(
@@ -51,9 +48,6 @@ uploaded_files = st.file_uploader(
     accept_multiple_files=True
 )
 
-# If a webcam image is captured, add it to uploaded_files
-if webcam_image:
-    uploaded_files = [webcam_image]  # Treat it as a list for consistency
 
 # **REAL-TIME CLASSIFICATION**
 if uploaded_files:
