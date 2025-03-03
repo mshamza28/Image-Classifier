@@ -7,6 +7,7 @@ import requests
 from streamlit_lottie import st_lottie
 import plotly.express as px
 
+st.set_page_config(page_title="Image Classifier", page_icon="\U0001F3A8", layout="centered")
 # Load the pre-trained ResNet50 model (cached for efficiency)
 @st.cache_resource
 def load_model():
@@ -39,7 +40,7 @@ confidence_threshold = st.sidebar.slider('Confidence Threshold', 0, 100, 20)
 
 
 # **Real-Time Classification UI**
-st.set_page_config(page_title="Image Classifier", page_icon="\U0001F3A8", layout="centered")
+
 st.title('\U0001F3A8  Image Classifier')
 
 
