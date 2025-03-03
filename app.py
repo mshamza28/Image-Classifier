@@ -40,6 +40,10 @@ confidence_threshold = st.sidebar.slider('Confidence Threshold', 0, 100, 20)
 # **Real-Time Classification UI**
 st.title('Real-Time Image Classifier 🎮')
 
+# **Webcam Capture for Live Classification**
+st.sidebar.subheader("Capture via Webcam 📷")
+webcam_image = st.sidebar.camera_input("Live Image Capture")
+
 # **Drag & Drop / Multiple Image Upload**
 uploaded_files = st.file_uploader(
     "Drag and drop image(s) here or browse...", 
@@ -47,18 +51,23 @@ uploaded_files = st.file_uploader(
     accept_multiple_files=True
 )
 
+# If a webcam image is captured, add it to uploaded_files
+if webcam_image:
+    uploaded_files = [webcam_image]  # Treat it as a list for consistency
 
 # **'GUESS THE OBJECT' FEATURE**
 if uploaded_files:
-    for uploaded_file in uploaded_files:
+    for i, uploaded_file in enumerate(uploaded_files):
+        unique_key = f"file_{i}_{hash(uploaded_file)}"  # Unique key for each file
+
         uploaded_image = Image.open(uploaded_file)
         st.image(uploaded_image, caption='Uploaded Image', use_column_width=True)
 
         # Ask the user to guess
-        user_guess = st.text_input("🔍 Guess what this object is before revealing the result!")
+        user_guess = st.text_input(f"🔍 Guess what this object is! (Image {i+1})", key=f"guess_{unique_key}")
 
         # Button to reveal prediction
-        reveal = st.button("Reveal Prediction", key=str(uploaded_file))
+        reveal = st.button("Reveal Prediction", key=f"reveal_{unique_key}")
 
         if reveal:
             st.write("🔍 **Let's see if your guess was correct!**")
@@ -66,7 +75,7 @@ if uploaded_files:
             # Display Lottie animation
             lottie_url = "https://lottie.host/48a98916-5ce1-41f7-a043-b5932bc5c542/w183dqaRuZ.json"
             lottie_animation = load_lottieurl(lottie_url)
-            st_lottie(lottie_animation, height=200, key=str(uploaded_file))
+            st_lottie(lottie_animation, height=200, key=f"animation_{unique_key}")
 
             # Run Prediction Instantly
             predictions = predict_and_show(uploaded_file, confidence_threshold)
@@ -78,7 +87,7 @@ if uploaded_files:
                 fig = px.bar(x=labels, y=scores, labels={'x':'Predicted Class', 'y':'Confidence (%)'}, title="Top Predictions")
                 st.plotly_chart(fig, use_container_width=True)
 
-                with st.expander("See Prediction Details"):
+                with st.expander(f"See Prediction Details (Image {i+1})", key=f"details_{unique_key}"):
                     for pred in predictions:
                         st.write(f"✅ **{pred[1].capitalize()}**: {pred[2]*100:.2f}% Confidence Level")
             else:
