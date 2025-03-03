@@ -39,7 +39,8 @@ confidence_threshold = st.sidebar.slider('Confidence Threshold', 0, 100, 20)
 
 
 # **Real-Time Classification UI**
-st.title('\U0001F3A8  Real-Time Image Classifier')
+st.set_page_config(page_title="Image Classifier", page_icon="\U0001F3A8", layout="centered")
+st.title('\U0001F3A8  Image Classifier')
 
 
 # **Drag & Drop / Multiple Image Upload**
