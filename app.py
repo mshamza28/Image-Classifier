@@ -37,8 +37,9 @@ def predict_and_show(img_data, confidence_threshold):
 st.sidebar.header('Advanced Options')
 confidence_threshold = st.sidebar.slider('Confidence Threshold', 0, 100, 20)
 
+
 # **Real-Time Classification UI**
-st.title('Real-Time Image Classifier')
+st.title('\U0001F3A8  Real-Time Image Classifier')
 
 
 # **Drag & Drop / Multiple Image Upload**
